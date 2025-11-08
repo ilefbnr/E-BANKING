@@ -1,16 +1,29 @@
-# E-Banking System in C
+# 🏦 E-Banking System in C
 
-A simple command-line e-banking application written in C that allows users to manage bank accounts with basic operations.
+A feature-rich command-line e-banking application written in C with role-based access control (User & Admin modes).
 
-## Features
+## ✨ Features
 
-- **Create Accounts**: Create new bank accounts with unique account numbers
-- **View Accounts**: Display information for all accounts or specific accounts
-- **Deposit Money**: Add funds to an account
-- **Withdraw Money**: Withdraw funds with balance validation
-- **Check Balance**: View the current balance of an account
-- **Transaction History**: View all transactions for an account
-- **Input Validation**: Comprehensive error handling for invalid operations
+### 👤 User Mode
+- **Create Accounts**: Create new bank accounts with unique account numbers (ACC001001, ACC001002, etc.)
+- **View Account Info**: Display detailed information for your account
+- **Deposit Money**: Add funds to your account with validation
+- **Withdraw Money**: Withdraw funds with balance and validation checks
+- **Check Balance**: View current balance in real-time
+- **Transaction History**: View complete transaction history with timestamps
+
+### 👨‍💼 Admin Mode (Protected by Authentication)
+- **View All Accounts**: Display all bank accounts with status
+- **Manage Accounts**: View, close, and reopen accounts
+- **Admin Management**: Add new administrators to the system
+- **Transaction Monitoring**: View transaction history for any account
+- **Account Status Control**: Close accounts (requires zero balance) or reactivate closed accounts
+
+### 🔒 Security Features
+- Admin authentication system (username/password)
+- Default admin credentials: `admin` / `admin123`
+- Role-based access control
+- Input validation and error handling
 
 ## Project Structure
 
@@ -85,27 +98,38 @@ gcc -Wall -Wextra -std=c99 -I./include -o ebank src/*.c
 
 ### Example Workflow
 
+#### User Mode:
 ```
-1. Create Account
-   - Enter: John Doe
-   - Creates account: ACC0000001000
+1. Select "Mode Utilisateur" from main menu
 
-2. Deposit Money
-   - Account: ACC0000001000
-   - Amount: 5000.00
+2. Create Account
+   - Enter: Alice Dupont
+   - System creates: ACC001001
 
-3. Withdraw Money
-   - Account: ACC0000001000
-   - Amount: 1000.00
+3. Deposit Money
+   - Account: ACC001001
+   - Amount: 5000.00 DT
+   - New Balance: 5000.00 DT
 
-4. Check Balance
-   - View current balance: 4000.00
+4. Withdraw Money
+   - Account: ACC001001
+   - Amount: 1000.00 DT
+   - New Balance: 4000.00 DT
 
 5. View Transactions
-   - See all transaction history
+   - See complete transaction history with dates
 ```
 
-## Data Structures
+#### Admin Mode:
+```
+1. Select "Mode Administrateur"
+2. Login with credentials (admin/admin123)
+3. View all accounts in the system
+4. Close/reopen accounts as needed
+5. Add new administrators
+```
+
+## 📊 Data Structures
 
 ### Account
 ```c
@@ -115,6 +139,7 @@ typedef struct {
     char holder_name[100];
     double balance;
     time_t created_date;
+    int is_active;  // 1 = active, 0 = closed
 } Account;
 ```
 
@@ -123,48 +148,125 @@ typedef struct {
 typedef struct {
     int id;
     char account_number[12];
-    char transaction_type[20];
+    char transaction_type[20];  // "DEPOSIT" or "WITHDRAWAL"
     double amount;
     time_t transaction_date;
 } Transaction;
 ```
 
-## Limitations
+### Admin Account
+```c
+typedef struct {
+    char username[50];
+    char password[50];
+    int is_active;  // 1 = active, 0 = inactive
+} Admin_account;
+```
 
-- Maximum 100 accounts (configurable in `account.h`)
-- Maximum 1000 transactions (configurable in `account.h`)
-- Data is stored in memory only (no persistent storage)
+### Bank
+```c
+typedef struct {
+    Account accounts[MAX_ACCOUNTS];
+    int account_nb;
+    Transaction transactions[MAX_TRANSACTIONS];
+    int transaction_nb;
+    Admin_account admins[MAX_ADMINS];
+    int admin_count;
+} Bank;
+```
+
+## ⚙️ System Configuration
+
+### Current Limits (configurable in `account.h`)
+- **Maximum Accounts**: 100
+- **Maximum Transactions**: 1000
+- **Maximum Admins**: 5
+- **Account Number Format**: ACC + 6 digits (e.g., ACC001001)
+
+### Technical Details
+- Data stored in memory (no persistence between sessions)
 - Single-threaded operation
-- No user authentication
+- UTF-8 support for French characters
+- Timestamps using system time
 
-## Future Enhancements
+## 🚀 Future Enhancements
 
-- File-based persistence (save/load accounts)
-- Database integration
-- User authentication and PIN protection
-- Transfer between accounts
-- Loan management
-- Multi-threaded operations
-- Interest calculation
-- Overdraft facility
+### Planned Features
+- [ ] File-based persistence (save/load to JSON/CSV)
+- [ ] Database integration (SQLite)
+- [ ] User PIN/password protection for accounts
+- [ ] Transfer money between accounts
+- [ ] Account statements (PDF generation)
+- [ ] Email notifications
+- [ ] Interest calculation on savings
+- [ ] Loan management system
+- [ ] Multi-currency support
+- [ ] Mobile app integration API
 
-## Requirements
+### Security Improvements
+- [ ] Password hashing (bcrypt)
+- [ ] Session management
+- [ ] Login attempt limits
+- [ ] Audit logs
+- [ ] Two-factor authentication
 
-- GCC compiler (or any C99 compatible compiler)
-- Make utility (optional, for using Makefile)
-- Linux/Unix environment (or Windows with WSL/MinGW)
+## 📋 Requirements
 
-## Compilation Flags
+- **Compiler**: GCC (or any C99 compatible compiler)
+- **Build Tool**: Make utility (optional but recommended)
+- **OS**: Linux/Unix environment (or Windows with WSL/MinGW)
+- **Terminal**: UTF-8 support for proper character display
 
-- `-Wall`: Enable all warnings
+## 🔧 Compilation Flags
+
+- `-Wall`: Enable all compiler warnings
 - `-Wextra`: Enable extra warnings
 - `-std=c99`: Use C99 standard
 - `-I./include`: Include header files from include directory
 
-## Author
+## 🎯 Learning Objectives
 
-Created as a demonstration of basic C programming concepts
+This project demonstrates:
+- **Data Structures**: structs, arrays, pointers
+- **Memory Management**: Stack allocation, pointer arithmetic
+- **File Organization**: Header/source file separation
+- **Input Validation**: User input handling and validation
+- **Role-Based Access**: Admin vs User permissions
+- **Authentication**: Basic login system
+- **Modular Design**: Separation of concerns
 
-## License
+## 📝 Project Status
 
-Free to use and modify
+**Status**: ✅ Fully Functional
+
+**Version**: 1.0.0
+
+**Last Updated**: November 2025
+
+## 👨‍💻 Author
+
+Created by **Ilef** as a comprehensive C programming project demonstrating:
+- System design and architecture
+- Data structure implementation
+- User interface design
+- Security basics
+
+## 📄 License
+
+Free to use and modify for educational purposes.
+
+## 🤝 Contributing
+
+Feel free to fork this project and submit pull requests for:
+- Bug fixes
+- New features
+- Documentation improvements
+- Code optimizations
+
+## 📞 Support
+
+For questions or issues, please open an issue on GitHub.
+
+---
+
+**⭐ If you find this project useful, please give it a star!**
