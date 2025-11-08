@@ -1,0 +1,22 @@
+# Fichiers compilés
+*.o
+*.out
+*.exe
+
+# Dossiers de build
+obj/
+bin/
+
+# Fichiers de l'éditeur
+.vscode/
+*.swp
+*.swo
+*~
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers temporaires
+*.tmp
+*.bak
