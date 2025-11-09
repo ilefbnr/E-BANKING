@@ -11,6 +11,8 @@ A feature-rich command-line e-banking application written in C with role-based a
 - **Withdraw Money**: Withdraw funds with balance and validation checks
 - **Check Balance**: View current balance in real-time
 - **Transaction History**: View complete transaction history with timestamps
+- **💸 Transfer Money**: Transfer funds between accounts with validation (NEW)
+- **📄 Account Statements**: Generate detailed account statements in text format (NEW)
 
 ### 👨‍💼 Admin Mode (Protected by Authentication)
 - **View All Accounts**: Display all bank accounts with status
@@ -18,6 +20,8 @@ A feature-rich command-line e-banking application written in C with role-based a
 - **Admin Management**: Add new administrators to the system
 - **Transaction Monitoring**: View transaction history for any account
 - **Account Status Control**: Close accounts (requires zero balance) or reactivate closed accounts
+- **💰 Interest Calculation**: Apply 3% annual interest to accounts, prorated by days (NEW)
+- **💾 Data Persistence**: Save/load all data to CSV files for persistence across sessions (NEW)
 
 ### 🔒 Security Features
 - Admin authentication system (username/password)
@@ -30,12 +34,20 @@ A feature-rich command-line e-banking application written in C with role-based a
 ```
 ebank/
 ├── include/
-│   └── account.h          # Header file with function declarations
+│   ├── account.h          # Header file with function declarations
+│   └── persistence.h      # Persistence & financial operations (NEW)
 ├── src/
 │   ├── main.c             # Main program with menu system
-│   └── account.c          # Account management functions
+│   ├── account.c          # Account management functions
+│   └── persistence.c      # CSV persistence & transfers (NEW)
+├── data/                  # Auto-created directory for CSV files (NEW)
+│   ├── accounts.csv       # Saved accounts
+│   ├── transactions.csv   # Saved transactions
+│   └── admins.csv         # Saved admin accounts
 ├── Makefile               # Build configuration
-└── README.md              # This file
+├── README.md              # This file
+├── FEATURES.md            # Detailed feature documentation (NEW)
+└── QUICKSTART.md          # Quick start guide (NEW)
 ```
 
 ## File Descriptions
@@ -56,6 +68,18 @@ ebank/
 - User input handling
 - Command processing
 - Input validation
+- Auto-save/load data on startup/exit (NEW)
+
+### `src/persistence.c` (NEW)
+- CSV file operations (save/load)
+- Money transfer between accounts
+- Account statement generation
+- Interest calculation and application
+
+### `include/persistence.h` (NEW)
+- Declares persistence functions
+- Defines file paths and constants
+- Financial operations prototypes
 
 ## Compilation
 
@@ -148,7 +172,7 @@ typedef struct {
 typedef struct {
     int id;
     char account_number[12];
-    char transaction_type[20];  // "DEPOSIT" or "WITHDRAWAL"
+    char transaction_type[20];  // "DEPOSIT", "WITHDRAWAL", "TRANSFER_IN", "TRANSFER_OUT", "INTEREST"
     double amount;
     time_t transaction_date;
 } Transaction;
@@ -178,30 +202,68 @@ typedef struct {
 ## ⚙️ System Configuration
 
 ### Current Limits (configurable in `account.h`)
-- **Maximum Accounts**: 100
-- **Maximum Transactions**: 1000
+- **Maximum Accounts**: 150 (increased)
+- **Maximum Transactions**: 2000 (increased)
 - **Maximum Admins**: 5
 - **Account Number Format**: ACC + 6 digits (e.g., ACC001001)
+- **Interest Rate**: 3% annual (0.03), prorated by days
 
 ### Technical Details
-- Data stored in memory (no persistence between sessions)
+- **Data Persistence**: CSV files in `data/` directory
+- **Auto-save**: On program exit
+- **Auto-load**: On program startup
 - Single-threaded operation
 - UTF-8 support for French characters
 - Timestamps using system time
 
+## 🆕 New Features (Version 2.0)
+
+### 1. 💾 CSV Persistence
+- **Automatic saving** on exit
+- **Automatic loading** on startup
+- Three CSV files: `accounts.csv`, `transactions.csv`, `admins.csv`
+- All data persists across sessions
+
+### 2. 💸 Money Transfers
+- Transfer between any two active accounts
+- Validates both accounts exist and are active
+- Checks sufficient balance
+- Creates dual transactions (TRANSFER_OUT + TRANSFER_IN)
+- Instant balance updates
+
+### 3. 📄 Account Statements
+- Generate formatted text reports
+- Includes:
+  - Account information
+  - Complete transaction history
+  - Current balance
+  - Statement date
+- Files named: `releve_ACC######.txt`
+
+### 4. 💰 Interest Calculation
+- 3% annual interest rate
+- Prorated by number of days
+- Formula: `interest = balance × 0.03 × (days/365)`
+- Can apply to single account or all accounts
+- Creates INTEREST transaction for tracking
+
 ## 🚀 Future Enhancements
 
+### Completed Features ✅
+- [x] File-based persistence (CSV format)
+- [x] Transfer money between accounts
+- [x] Account statements (text format)
+- [x] Interest calculation on savings
+
 ### Planned Features
-- [ ] File-based persistence (save/load to JSON/CSV)
 - [ ] Database integration (SQLite)
 - [ ] User PIN/password protection for accounts
-- [ ] Transfer money between accounts
-- [ ] Account statements (PDF generation)
+- [ ] PDF statement generation
 - [ ] Email notifications
-- [ ] Interest calculation on savings
 - [ ] Loan management system
 - [ ] Multi-currency support
 - [ ] Mobile app integration API
+- [ ] Scheduled automatic interest application
 
 ### Security Improvements
 - [ ] Password hashing (bcrypt)
@@ -216,6 +278,7 @@ typedef struct {
 - **Build Tool**: Make utility (optional but recommended)
 - **OS**: Linux/Unix environment (or Windows with WSL/MinGW)
 - **Terminal**: UTF-8 support for proper character display
+- **Disk Space**: Minimal (~1MB for CSV files and statements)
 
 ## 🔧 Compilation Flags
 
@@ -234,14 +297,25 @@ This project demonstrates:
 - **Role-Based Access**: Admin vs User permissions
 - **Authentication**: Basic login system
 - **Modular Design**: Separation of concerns
+- **File I/O**: CSV parsing and generation (NEW)
+- **Financial Calculations**: Interest computation (NEW)
+- **Data Persistence**: Save/load state management (NEW)
 
 ## 📝 Project Status
 
-**Status**: ✅ Fully Functional
+**Status**: ✅ Fully Functional with Advanced Features
 
-**Version**: 1.0.0
+**Version**: 2.0.0
 
-**Last Updated**: November 2025
+**Last Updated**: November 9, 2025
+
+### What's New in v2.0
+- ✅ CSV-based data persistence
+- ✅ Money transfer functionality
+- ✅ Account statement generation
+- ✅ Interest calculation system
+- ✅ Auto-save/load on startup
+- ✅ Enhanced documentation (FEATURES.md, QUICKSTART.md)
 
 ## 👨‍💻 Author
 
@@ -265,8 +339,13 @@ Feel free to fork this project and submit pull requests for:
 
 ## 📞 Support
 
-For questions or issues, please open an issue on GitHub.
+For questions or issues, please open an issue on GitHub: [E-BANKING Repository](https://github.com/ilefbnr/E-BANKING)
+
+### 📚 Additional Documentation
+- **FEATURES.md**: Detailed technical documentation of all features
+- **QUICKSTART.md**: Quick start guide with test scenarios
+- **.github/copilot-instructions.md**: Development guidelines
 
 ---
 
-**⭐ If you find this project useful, please give it a star!**
+**⭐ If you find this project useful, please give it a star on [GitHub](https://github.com/ilefbnr/E-BANKING)!**

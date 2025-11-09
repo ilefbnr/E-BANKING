@@ -1,0 +1,30 @@
+═══════════════════════════════════════════════════════
+              RELEVÉ DE COMPTE BANCAIRE                
+═══════════════════════════════════════════════════════
+
+Numéro de compte: ACC001001
+Titulaire: islem bennour
+Date de création: Sun Nov  9 08:38:09 2025
+Statut: ACTIF
+Solde actuel: 750000000.00 DT
+
+═══════════════════════════════════════════════════════
+                  HISTORIQUE DES TRANSACTIONS          
+═══════════════════════════════════════════════════════
+
+1. Type: DEPOSIT         | Montant: 1000000000.00 DT
+   Date: Sun Nov  9 08:38:32 2025
+
+2. Type: WITHDRAWAL      | Montant: 250000000.00 DT
+   Date: Sun Nov  9 08:39:24 2025
+
+
+═══════════════════════════════════════════════════════
+                      RÉSUMÉ                           
+═══════════════════════════════════════════════════════
+Total des crédits: 1000000000.00 DT
+Total des débits: 250000000.00 DT
+Nombre de transactions: 2
+═══════════════════════════════════════════════════════
+
+Rélevé généré le: Sun Nov  9 08:39:39 2025

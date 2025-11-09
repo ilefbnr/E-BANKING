@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "../include/account.h"
+#include "../include/persistence.h"
 
 
 
@@ -298,6 +299,86 @@ void display_balance(Bank *bank, const char *account_number) {
     printf("===========================\n");
 }
 
+// ============================================
+// NOUVELLES FONCTIONNALITÉS - MENUS
+// ============================================
 
+void menu_persistence(Bank *bank) {
+    int choice;
+    
+    printf("\n========== GESTION DES DONNÉES ==========\n");
+    printf("1. Sauvegarder toutes les données (CSV)\n");
+    printf("2. Charger toutes les données (CSV)\n");
+    printf("3. Retour\n");
+    printf("=========================================\n");
+    printf("Votre choix: ");
+    
+    scanf("%d", &choice);
+    while (getchar() != '\n');
+    
+    if (choice == 1) {
+        save_all_data(bank);
+    } else if (choice == 2) {
+        load_all_data(bank);
+    }
+}
 
+void menu_transfer(Bank *bank) {
+    char from_account[ACCOUNT_NUMBER_LENGTH];
+    char to_account[ACCOUNT_NUMBER_LENGTH];
+    double amount;
+    
+    printf("\n========== TRANSFERT D'ARGENT ==========\n");
+    printf("Compte source: ");
+    fgets(from_account, ACCOUNT_NUMBER_LENGTH, stdin);
+    from_account[strcspn(from_account, "\n")] = 0;
+    
+    printf("Compte destinataire: ");
+    fgets(to_account, ACCOUNT_NUMBER_LENGTH, stdin);
+    to_account[strcspn(to_account, "\n")] = 0;
+    
+    printf("Montant à transférer (DT): ");
+    scanf("%lf", &amount);
+    while (getchar() != '\n');
+    
+    transfer_money(bank, from_account, to_account, amount);
+}
 
+void menu_statement(Bank *bank) {
+    char account_number[ACCOUNT_NUMBER_LENGTH];
+    char filename[100];
+    
+    printf("\n========== RELEVÉ DE COMPTE ==========\n");
+    printf("Numéro de compte: ");
+    fgets(account_number, ACCOUNT_NUMBER_LENGTH, stdin);
+    account_number[strcspn(account_number, "\n")] = 0;
+    
+    // Générer un nom de fichier automatique
+    sprintf(filename, "releve_%s.txt", account_number);
+    
+    generate_statement(bank, account_number, filename);
+}
+
+void menu_interest(Bank *bank) {
+    int choice;
+    char account_number[ACCOUNT_NUMBER_LENGTH];
+    
+    printf("\n========== CALCUL D'INTÉRÊTS ==========\n");
+    printf("1. Appliquer à un compte spécifique\n");
+    printf("2. Appliquer à tous les comptes\n");
+    printf("3. Retour\n");
+    printf("=======================================\n");
+    printf("Votre choix: ");
+    
+    scanf("%d", &choice);
+    while (getchar() != '\n');
+    
+    if (choice == 1) {
+        printf("Numéro de compte: ");
+        fgets(account_number, ACCOUNT_NUMBER_LENGTH, stdin);
+        account_number[strcspn(account_number, "\n")] = 0;
+        apply_interest_to_account(bank, account_number);
+    } else if (choice == 2) {
+        apply_interest_to_all_accounts(bank);
+    }
+}

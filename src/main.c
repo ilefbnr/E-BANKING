@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/account.h"
+#include "../include/persistence.h"
 
 // ============================================
 // FONCTIONS UTILITAIRES
@@ -40,7 +41,9 @@ void display_user_menu() {
     printf("4. Retirer de l'argent\n");
     printf("5. Consulter le solde\n");
     printf("6. Voir l'historique\n");
-    printf("7. Retour au menu principal\n");
+    printf("7. 💸 Transférer de l'argent\n");
+    printf("8. 📄 Générer un relevé\n");
+    printf("9. Retour au menu principal\n");
     printf("======================================\n");
     printf("Votre choix: ");
 }
@@ -53,7 +56,9 @@ void display_admin_menu() {
     printf("4. Réactiver un compte\n");
     printf("5. Ajouter un administrateur\n");
     printf("6. Historique d'un compte\n");
-    printf("7. Retour au menu principal\n");
+    printf("7. 💰 Appliquer les intérêts\n");
+    printf("8. 💾 Sauvegarder/Charger données\n");
+    printf("9. Retour au menu principal\n");
     printf("=========================================\n");
     printf("Votre choix: ");
 }
@@ -285,6 +290,12 @@ void user_mode(Bank *bank) {
                 handle_view_transactions(bank);
                 break;
             case 7:
+                menu_transfer(bank);
+                break;
+            case 8:
+                menu_statement(bank);
+                break;
+            case 9:
                 printf("\n↩️  Retour au menu principal...\n");
                 return;
             default:
@@ -334,6 +345,12 @@ void admin_mode(Bank *bank) {
                 handle_view_transactions(bank);
                 break;
             case 7:
+                menu_interest(bank);
+                break;
+            case 8:
+                menu_persistence(bank);
+                break;
+            case 9:
                 printf("\n↩️  Déconnexion...\n");
                 return;
             default:
@@ -353,6 +370,9 @@ int main() {
     int choice;
     
     initialize_bank(&bank);
+    
+    // Charger les données sauvegardées
+    load_all_data(&bank);
     
     printf("\n");
     printf("╔════════════════════════════════════════════╗\n");
@@ -381,6 +401,8 @@ int main() {
                 admin_mode(&bank);
                 break;
             case 3:
+                // Sauvegarder avant de quitter
+                save_all_data(&bank);
                 printf("\n");
                 printf("╔════════════════════════════════════════════╗\n");
                 printf("║   Merci d'avoir utilisé E-Banking! 👋     ║\n");

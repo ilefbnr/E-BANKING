@@ -74,5 +74,11 @@ void display_all_accounts(Bank *bank);
 int add_admin(Bank *bank, const char *username, const char *password);
 int authenticate_admin(Bank *bank, const char *username, const char *password);
 
+// Nouvelles fonctionnalités
+void menu_persistence(Bank *bank);
+void menu_transfer(Bank *bank);
+void menu_statement(Bank *bank);
+void menu_interest(Bank *bank);
+
 #endif
 
